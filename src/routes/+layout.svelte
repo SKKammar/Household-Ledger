@@ -40,10 +40,10 @@
 			<a href="/expenses">Record Expense</a>
 			<a href="/statement">My Statement</a>
 			<a href="/admin">Admin</a>
-			<form action="/logout" method="POST" style="display:inline; margin:0; padding:0;">
-				<button type="submit">Logout</button>
-			</form>
 		</div>
+		<form action="/logout" method="POST" class="logout-form">
+			<button type="submit" class="logout-btn">Logout →</button>
+		</form>
 	</nav>
 {/if}
 
@@ -63,10 +63,10 @@
 	.nav-links {
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: center;
 		gap: 20px;
-		padding-left: 28px;
 	}
-	.nav-links a, .nav-links button, .back-btn {
+	.nav-links a, .nav-links button, .back-btn, .logout-btn {
 		font-family: 'Special Elite', cursive;
 		font-size: 10px;
 		letter-spacing: 0.15em;
@@ -79,7 +79,7 @@
 		padding: 0;
 		cursor: pointer;
 	}
-	.nav-links a:hover, .nav-links button:hover, .back-btn:hover {
+	.nav-links a:hover, .nav-links button:hover, .back-btn:hover, .logout-btn:hover {
 		color: var(--ink);
 	}
 	.back-btn {
@@ -87,6 +87,16 @@
 		left: 15px;
 		top: 50%;
 		transform: translateY(-50%);
+		font-weight: bold;
+	}
+	.logout-form {
+		position: absolute;
+		right: 15px;
+		top: 50%;
+		transform: translateY(-50%);
+		margin: 0;
+	}
+	.logout-btn {
 		font-weight: bold;
 	}
 
