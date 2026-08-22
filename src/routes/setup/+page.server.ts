@@ -54,7 +54,11 @@ export const actions = {
 		);
 
 		// Send magic link to the new admin
-		await sendMagicLink(email.trim().toLowerCase(), memberId);
+		const result = await sendMagicLink(email.trim().toLowerCase(), memberId);
+
+		if (!result.success) {
+			return { error: 'Could not send login email. Try again in a moment.' };
+		}
 
 		return { success: true, message: 'Check your email for the login link.' };
 	}

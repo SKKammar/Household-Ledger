@@ -48,7 +48,14 @@ export const actions = {
 			createdAt: nowIST(),
 		});
 
-		await sendMagicLink(email.trim().toLowerCase(), memberId);
+		const result = await sendMagicLink(email.trim().toLowerCase(), memberId);
+
+		if (!result.success) {
+			return {
+				error: 'Member added but welcome email failed to send. Try re-inviting them from the admin panel.'
+			};
+		}
+
 		return { success: true };
 	},
 

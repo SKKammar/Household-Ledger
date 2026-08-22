@@ -29,7 +29,11 @@ export const actions = {
 			return { error: 'This email is not registered in your household.' };
 		}
 
-		await sendMagicLink(email.trim().toLowerCase(), member.id);
+		const result = await sendMagicLink(email.trim().toLowerCase(), member.id);
+
+		if (!result.success) {
+			return { error: 'Could not send email. Try again in a moment.' };
+		}
 
 		return { success: true, message: 'Check your email for the login link.' };
 	}

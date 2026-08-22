@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { text, integer, real, sqliteTable } from 'drizzle-orm/sqlite-core';
 
 export const members = sqliteTable('members', {
@@ -56,3 +56,47 @@ export const expenseSplits = sqliteTable('expense_splits', {
 	shareAmount: real('share_amount').notNull(),
 	createdAt: text('created_at').notNull(),
 });
+
+export const magicLinksRelations = relations(magicLinks, ({ one }) => ({
+	member: one(members, {
+		fields: [magicLinks.memberId],
+		references: [members.id],
+	}),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+	member: one(members, {
+		fields: [sessions.memberId],
+		references: [members.id],
+	}),
+}));
+
+export const categoriesRelations = relations(categories, ({ one }) => ({
+	createdBy: one(members, {
+		fields: [categories.createdBy],
+		references: [members.id],
+	}),
+}));
+
+export const expensesRelations = relations(expenses, ({ one, many }) => ({
+	member: one(members, {
+		fields: [expenses.memberId],
+		references: [members.id],
+	}),
+	category: one(categories, {
+		fields: [expenses.categoryId],
+		references: [categories.id],
+	}),
+	splits: many(expenseSplits),
+}));
+
+export const expenseSplitsRelations = relations(expenseSplits, ({ one }) => ({
+	expense: one(expenses, {
+		fields: [expenseSplits.expenseId],
+		references: [expenses.id],
+	}),
+	member: one(members, {
+		fields: [expenseSplits.memberId],
+		references: [members.id],
+	}),
+}));
