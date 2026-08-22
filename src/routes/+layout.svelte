@@ -36,10 +36,10 @@
 			<button type="button" on:click={() => window.history.back()} class="back-btn">← Back</button>
 		{/if}
 		<div class="nav-links">
-			<a href="/dashboard">Dashboard</a>
-			<a href="/expenses">Record Expense</a>
-			<a href="/statement">My Statement</a>
-			<a href="/admin">Admin</a>
+			<a href="/dashboard" class:active={$page.url.pathname === '/dashboard'}>Dashboard</a>
+			<a href="/expenses" class:active={$page.url.pathname.startsWith('/expenses')}>Record Expense</a>
+			<a href="/statement" class:active={$page.url.pathname.startsWith('/statement')}>My Statement</a>
+			<a href="/admin" class:active={$page.url.pathname.startsWith('/admin')}>Admin</a>
 		</div>
 		<form action="/logout" method="POST" class="logout-form">
 			<button type="submit" class="logout-btn">Logout</button>
@@ -79,8 +79,13 @@
 		padding: 0;
 		cursor: pointer;
 	}
-	.nav-links a:hover, .nav-links button:hover, .back-btn:hover, .logout-btn:hover {
+	.nav-links a:hover, .nav-links button:hover, .back-btn:hover, .logout-btn:hover, .nav-links a.active {
 		color: var(--ink);
+	}
+	.nav-links a.active {
+		font-weight: bold;
+		border-bottom: 1px solid var(--ink);
+		padding-bottom: 2px;
 	}
 	.back-btn {
 		position: absolute;
