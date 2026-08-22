@@ -4,7 +4,7 @@ import { db } from '$lib/db';
 import { sessions } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 
-const PUBLIC_ROUTES = ['/login', '/auth/verify', '/setup'];
+const PUBLIC_ROUTES = ['/login', '/auth/verify', '/setup', '/join'];
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get('session');

@@ -12,12 +12,6 @@ function generateInviteCode(): string {
 
 export const load = async ({ locals }) => {
 	if (locals.member) throw redirect(303, '/dashboard');
-
-	const existingHousehold = await db.select()
-		.from(households)
-		.limit(1);
-	
-	if (existingHousehold.length > 0) throw redirect(303, '/login');
 	return {};
 };
 
@@ -31,11 +25,7 @@ export const actions = {
 			return { error: 'Name and email are required' };
 		}
 
-		// Double check to prevent race conditions
-		const existingHousehold = await db.select().from(households).limit(1);
-		if (existingHousehold.length > 0) {
-			throw redirect(303, '/login');
-		}
+
 
 		const now = nowIST();
 		const householdId = randomUUID();
