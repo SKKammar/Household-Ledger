@@ -11,6 +11,10 @@
 {#if showNav}
 	<nav class="nav-container">
 		<div class="nav-links">
+			{#if $page.url.pathname !== '/dashboard'}
+				<a href="javascript:history.back()" class="back-btn">← Back</a>
+				<span class="nav-separator">|</span>
+			{/if}
 			<a href="/dashboard">Dashboard</a>
 			<a href="/expenses">Record Expense</a>
 			<a href="/statement">My Statement</a>
@@ -44,5 +48,12 @@
 	.nav-links a:hover {
 		color: var(--stamp-red);
 		text-decoration: none;
+	}
+	.back-btn {
+		font-weight: bold;
+	}
+	.nav-separator {
+		color: var(--rule);
+		margin: 0 5px;
 	}
 </style>
