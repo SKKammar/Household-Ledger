@@ -4,7 +4,7 @@ import {
   BREVO_SENDER_EMAIL,
   BREVO_SENDER_NAME
 } from '$env/static/private';
-import { PUBLIC_APP_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { db } from './db';
 import { magicLinks } from './db/schema';
 import { eq } from 'drizzle-orm';
@@ -42,7 +42,7 @@ export async function sendMagicLink(email: string, memberId: string) {
     createdAt: now,
   });
 
-  const link = `${PUBLIC_APP_URL}/auth/verify?token=${token}`;
+  const link = `${env.PUBLIC_APP_URL}/auth/verify?token=${token}`;
 
   // Dev mode — print link to terminal instead of sending email
   if (process.env.NODE_ENV === 'development') {
