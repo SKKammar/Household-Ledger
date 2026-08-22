@@ -199,4 +199,30 @@
 			opacity: 1;
 		}
 	}
+
+	@media (max-width: 600px) {
+		.statement-wrapper {
+			padding: 20px;
+			margin: 20px auto;
+		}
+		.statement-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 5px;
+		}
+		.expense-row {
+			grid-template-columns: 1fr auto;
+			grid-template-areas: 
+				"date date"
+				"category amount"
+				"note note";
+			gap: 4px;
+			padding: 12px 0;
+		}
+		.expense-date { grid-area: date; font-size: 0.85em; color: var(--ink-muted); }
+		.expense-category { grid-area: category; font-weight: bold; }
+		.expense-amount { grid-area: amount; font-size: 1.1em; }
+		.expense-note { grid-area: note; margin-top: 4px; }
+		.expense-desc { grid-area: note; margin-top: 4px; }
+	}
 </style>

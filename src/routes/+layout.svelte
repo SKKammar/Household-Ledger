@@ -36,6 +36,7 @@
 	}
 	.nav-links {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 20px;
 		padding-left: 28px;
 	}
@@ -55,5 +56,15 @@
 	.nav-separator {
 		color: var(--rule);
 		margin: 0 5px;
+	}
+
+	@media (max-width: 600px) {
+		.nav-container {
+			padding: 15px 15px;
+		}
+		.nav-links {
+			padding-left: 0;
+			gap: 15px;
+		}
 	}
 </style>
