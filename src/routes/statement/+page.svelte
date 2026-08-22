@@ -47,6 +47,9 @@
 				<div class="expense-note">
 					{#if expense.note}{expense.note}{/if}
 					{#if expense.isSplit}<span class="split-badge">(split among {expense.splitAmong})</span>{/if}
+					{#if !data.readOnly && expense.isEditable && !printMode}
+						<a href="/expenses/{expense.id}/edit" class="edit-link">[Edit]</a>
+					{/if}
 				</div>
 			</div>
 		{/each}
@@ -141,6 +144,16 @@
 	.expense-note {
 		color: var(--ink-faded, #6b5f4a);
 		font-size: 0.9em;
+	}
+
+	.edit-link {
+		margin-left: 8px;
+		color: var(--stamp-blue, #2a4a6b);
+		text-decoration: none;
+		font-family: 'Special Elite', cursive;
+	}
+	.edit-link:hover {
+		color: var(--stamp-red, #8b3a2a);
 	}
 
 	.split-badge {

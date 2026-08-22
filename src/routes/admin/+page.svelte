@@ -62,9 +62,12 @@
 
 	<div class="admin-section">
 		<h2>My Admin Status</h2>
-		<form method="POST" action="?/stepDown" use:enhance>
-			<button type="submit" class="small-btn delete-btn">Step Down as Admin</button>
-		</form>
+		<div class="admin-controls">
+			<a href="/admin/categories" class="small-btn edit-btn">Manage Categories</a>
+			<form method="POST" action="?/stepDown" use:enhance style="display:inline-block;">
+				<button type="submit" class="small-btn delete-btn">Step Down as Admin</button>
+			</form>
+		</div>
 	</div>
 
 	{#if data.isOnlyAdmin}
@@ -129,6 +132,17 @@
 	.small-btn {
 		padding: 4px 8px;
 		font-size: 0.9em;
+		text-decoration: none;
+	}
+	.edit-btn {
+		color: var(--stamp-blue, #2a4a6b);
+		border: 1px solid var(--stamp-blue, #2a4a6b);
+		background: none;
+	}
+	.admin-controls {
+		display: flex;
+		gap: 15px;
+		align-items: center;
 	}
 	.delete-btn {
 		color: var(--stamp-red, #8b3a2a);

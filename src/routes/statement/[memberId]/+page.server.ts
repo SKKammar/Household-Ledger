@@ -15,7 +15,7 @@ export const load = async ({ params, url }) => {
 	
 	const prefix = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
 
-	const ownExpenses = await db.query.expenses.findMany({
+	const rawExpenses = await db.query.expenses.findMany({
 		where: (e, { eq, like, and }) => and(
 			eq(e.memberId, targetMember.id),
 			like(e.date, `${prefix}%`)
@@ -23,6 +23,11 @@ export const load = async ({ params, url }) => {
 		with: { category: true },
 		orderBy: (e, { asc }) => asc(e.date),
 	});
+
+	const ownExpenses = rawExpenses.map(e => ({
+		...e,
+		isEditable: false
+	}));
 
 	const splitsReceived = await db.query.expenseSplits.findMany({
 		where: (es, { eq }) => eq(es.memberId, targetMember.id),

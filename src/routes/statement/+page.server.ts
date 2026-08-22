@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { currentMonthIST } from '$lib/utils/time';
+import { currentMonthIST, isCurrentMonthIST } from '$lib/utils/time';
 
 export const load = async ({ locals, url }) => {
 	const member = locals.member!;
@@ -11,7 +11,7 @@ export const load = async ({ locals, url }) => {
 	const prefix = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
 
 	// Own expenses
-	const ownExpenses = await db.query.expenses.findMany({
+	const rawExpenses = await db.query.expenses.findMany({
 		where: (e, { eq, like, and }) => and(
 			eq(e.memberId, member.id),
 			like(e.date, `${prefix}%`)
@@ -19,6 +19,11 @@ export const load = async ({ locals, url }) => {
 		with: { category: true },
 		orderBy: (e, { asc }) => asc(e.date),
 	});
+
+	const ownExpenses = rawExpenses.map(e => ({
+		...e,
+		isEditable: isCurrentMonthIST(e.date)
+	}));
 
 	// Splits received
 	const splitsReceived = await db.query.expenseSplits.findMany({
