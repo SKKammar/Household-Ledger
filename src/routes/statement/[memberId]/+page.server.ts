@@ -2,9 +2,12 @@ import { db } from '$lib/db';
 import { currentMonthIST } from '$lib/utils/time';
 import { error } from '@sveltejs/kit';
 
-export const load = async ({ params, url }) => {
+export const load = async ({ params, url, locals }) => {
 	const targetMember = await db.query.members.findFirst({
-		where: (m, { eq }) => eq(m.id, params.memberId),
+		where: (m, { eq, and }) => and(
+			eq(m.id, params.memberId),
+			eq(m.householdId, locals.member!.householdId)
+		),
 	});
 
 	if (!targetMember) throw error(404, 'Member not found');

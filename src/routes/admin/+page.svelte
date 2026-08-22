@@ -16,7 +16,18 @@
 	{/if}
 
 	<div class="admin-section">
-		<h2>Add New Member</h2>
+		<h2>Household Invite Code</h2>
+		<p>Share this code with members so they can join at <code>/join</code>.</p>
+		<div class="invite-code-container">
+			<span class="invite-code">{data.inviteCode}</span>
+			<form method="POST" action="?/regenerateInviteCode" use:enhance>
+				<button type="submit" class="small-btn">Regenerate Code</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="admin-section">
+		<h2>Add New Member (Email Invite)</h2>
 		<form method="POST" action="?/addMember" use:enhance class="add-form">
 			<input type="text" name="name" placeholder="Name" required />
 			<input type="email" name="email" placeholder="Email" required />
@@ -99,6 +110,20 @@
 	}
 	.add-form input {
 		padding: 8px;
+	}
+	.invite-code-container {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		margin-top: 10px;
+	}
+	.invite-code {
+		font-family: 'Special Elite', cursive;
+		font-size: 1.5em;
+		background: #fff;
+		padding: 5px 15px;
+		border: 1px dashed var(--stamp-blue, #2a4a6b);
+		letter-spacing: 2px;
 	}
 	.member-row {
 		display: flex;

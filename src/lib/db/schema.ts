@@ -1,15 +1,25 @@
 import { relations, sql } from 'drizzle-orm';
-import { text, integer, real, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { text, integer, real, sqliteTable, unique } from 'drizzle-orm/sqlite-core';
+
+export const households = sqliteTable('households', {
+	id: text('id').primaryKey(),
+	name: text('name').notNull(),
+	inviteCode: text('invite_code').notNull().unique(),
+	createdAt: text('created_at').notNull(),
+});
 
 export const members = sqliteTable('members', {
 	id: text('id').primaryKey(),
+	householdId: text('household_id').notNull().references(() => households.id),
 	name: text('name').notNull(),
-	email: text('email').notNull().unique(),
+	email: text('email').notNull(),
 	avatarColor: text('avatar_color').notNull(),
 	isAdmin: integer('is_admin').notNull().default(0),
 	deletedAt: text('deleted_at'),
 	createdAt: text('created_at').notNull(),
-});
+}, (t) => ({
+	unq: unique().on(t.email, t.householdId)
+}));
 
 export const magicLinks = sqliteTable('magic_links', {
 	id: text('id').primaryKey(),
@@ -30,6 +40,7 @@ export const sessions = sqliteTable('sessions', {
 
 export const categories = sqliteTable('categories', {
 	id: text('id').primaryKey(),
+	householdId: text('household_id').notNull().references(() => households.id),
 	name: text('name').notNull(),
 	isDefault: integer('is_default').notNull().default(0),
 	createdBy: text('created_by').references(() => members.id),
@@ -39,6 +50,7 @@ export const categories = sqliteTable('categories', {
 
 export const expenses = sqliteTable('expenses', {
 	id: text('id').primaryKey(),
+	householdId: text('household_id').notNull().references(() => households.id),
 	memberId: text('member_id').notNull().references(() => members.id),
 	categoryId: text('category_id').notNull().references(() => categories.id),
 	amount: real('amount').notNull(),
@@ -76,9 +88,17 @@ export const categoriesRelations = relations(categories, ({ one }) => ({
 		fields: [categories.createdBy],
 		references: [members.id],
 	}),
+	household: one(households, {
+		fields: [categories.householdId],
+		references: [households.id],
+	}),
 }));
 
 export const expensesRelations = relations(expenses, ({ one, many }) => ({
+	household: one(households, {
+		fields: [expenses.householdId],
+		references: [households.id],
+	}),
 	member: one(members, {
 		fields: [expenses.memberId],
 		references: [members.id],
@@ -98,5 +118,18 @@ export const expenseSplitsRelations = relations(expenseSplits, ({ one }) => ({
 	member: one(members, {
 		fields: [expenseSplits.memberId],
 		references: [members.id],
+	}),
+}));
+
+export const householdsRelations = relations(households, ({ many }) => ({
+	members: many(members),
+	categories: many(categories),
+	expenses: many(expenses),
+}));
+
+export const membersRelations = relations(members, ({ one }) => ({
+	household: one(households, {
+		fields: [members.householdId],
+		references: [households.id],
 	}),
 }));

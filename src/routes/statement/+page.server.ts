@@ -14,6 +14,7 @@ export const load = async ({ locals, url }) => {
 	const rawExpenses = await db.query.expenses.findMany({
 		where: (e, { eq, like, and }) => and(
 			eq(e.memberId, member.id),
+			eq(e.householdId, member.householdId),
 			like(e.date, `${prefix}%`)
 		),
 		with: { category: true },

@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
 import { members, categories, expenses, expenseSplits } from '$lib/db/schema';
-import { isNull, and, ne } from 'drizzle-orm';
+import { isNull, and, ne, eq, inArray } from 'drizzle-orm';
 import { nowIST, todayIST, isCurrentMonthIST } from '$lib/utils/time';
 import { randomUUID } from 'crypto';
 import { redirect } from '@sveltejs/kit';
@@ -8,11 +8,15 @@ import { redirect } from '@sveltejs/kit';
 export const load = async ({ locals }) => {
 	const activeCategories = await db.select()
 		.from(categories)
-		.where(isNull(categories.deletedAt));
+		.where(and(
+			eq(categories.householdId, locals.member!.householdId),
+			isNull(categories.deletedAt)
+		));
 
 	const activeMembers = await db.select()
 		.from(members)
 		.where(and(
+			eq(members.householdId, locals.member!.householdId),
 			isNull(members.deletedAt),
 			ne(members.id, locals.member!.id)
 		));
@@ -50,11 +54,25 @@ export const actions = {
 		const currentMember = locals.member!;
 		const splitAmong = isSplit ? splitMemberIds.length + 1 : null;
 		
+		if (isSplit && splitMemberIds.length > 0) {
+			const validMembers = await db.select()
+				.from(members)
+				.where(and(
+					eq(members.householdId, currentMember.householdId),
+					isNull(members.deletedAt),
+					inArray(members.id, splitMemberIds)
+				));
+			if (validMembers.length !== splitMemberIds.length) {
+				return { error: 'One or more selected members are no longer active.' };
+			}
+		}
+
 		await db.transaction(async (tx) => {
 			const expenseId = randomUUID();
 			
 			await tx.insert(expenses).values({
 				id: expenseId,
+				householdId: currentMember.householdId,
 				memberId: currentMember.id,
 				categoryId,
 				amount,

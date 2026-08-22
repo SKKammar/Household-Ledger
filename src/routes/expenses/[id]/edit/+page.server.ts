@@ -7,7 +7,10 @@ import { nowIST } from '$lib/utils/time';
 
 export const load = async ({ params, locals }) => {
 	const expense = await db.query.expenses.findFirst({
-		where: (e, { eq }) => eq(e.id, params.id),
+		where: (e, { eq, and }) => and(
+			eq(e.id, params.id),
+			eq(e.householdId, locals.member!.householdId)
+		),
 	});
 
 	if (!expense) throw error(404, 'Expense not found');
@@ -30,7 +33,10 @@ export const load = async ({ params, locals }) => {
 export const actions = {
 	delete: async ({ params, locals }) => {
 		const expense = await db.query.expenses.findFirst({
-			where: (e, { eq }) => eq(e.id, params.id),
+			where: (e, { eq, and }) => and(
+				eq(e.id, params.id),
+				eq(e.householdId, locals.member!.householdId)
+			),
 		});
 
 		if (!expense) throw error(404, 'Expense not found');
