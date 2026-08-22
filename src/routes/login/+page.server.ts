@@ -1,7 +1,5 @@
 import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/db';
-import { members } from '$lib/db/schema';
-import { eq, isNull } from 'drizzle-orm';
 import { sendMagicLink } from '$lib/email';
 
 export const load = async ({ locals }) => {

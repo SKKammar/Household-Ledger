@@ -10,11 +10,10 @@
 
 {#if showNav}
 	<nav class="nav-container">
+		{#if $page.url.pathname !== '/dashboard'}
+			<button type="button" on:click={() => window.history.back()} class="back-btn">← Back</button>
+		{/if}
 		<div class="nav-links">
-			{#if $page.url.pathname !== '/dashboard'}
-				<a href="javascript:history.back()" class="back-btn">← Back</a>
-				<span class="nav-separator">|</span>
-			{/if}
 			<a href="/dashboard">Dashboard</a>
 			<a href="/expenses">Record Expense</a>
 			<a href="/statement">My Statement</a>
@@ -33,6 +32,7 @@
 		padding: 15px 52px; /* aligns with margin */
 		border-bottom: 2px double var(--rule);
 		margin-bottom: 20px;
+		position: relative;
 	}
 	.nav-links {
 		display: flex;
@@ -45,17 +45,32 @@
 		color: var(--ink);
 		text-transform: uppercase;
 		font-size: 0.9rem;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
 	}
 	.nav-links a:hover {
 		color: var(--stamp-red);
 		text-decoration: none;
 	}
 	.back-btn {
+		position: absolute;
+		left: 15px;
+		top: 50%;
+		transform: translateY(-50%);
 		font-weight: bold;
+		font-family: 'Special Elite', cursive;
+		color: var(--ink);
+		text-transform: uppercase;
+		font-size: 0.9rem;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
 	}
-	.nav-separator {
-		color: var(--rule);
-		margin: 0 5px;
+	.back-btn:hover {
+		color: var(--stamp-red);
 	}
 
 	@media (max-width: 600px) {

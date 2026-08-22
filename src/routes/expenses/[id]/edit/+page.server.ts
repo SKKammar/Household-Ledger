@@ -1,9 +1,8 @@
 import { db } from '$lib/db';
-import { categories, expenses, expenseSplits } from '$lib/db/schema';
+import { expenses, expenseSplits } from '$lib/db/schema';
 import { isCurrentMonthIST } from '$lib/utils/time';
 import { error, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { nowIST } from '$lib/utils/time';
 
 export const load = async ({ params, locals }) => {
 	const expense = await db.query.expenses.findFirst({

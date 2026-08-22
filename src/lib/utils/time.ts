@@ -18,7 +18,7 @@ export function isCurrentMonthIST(dateStr: string): boolean {
 }
 
 export function formatDateIST(dateStr: string): string {
-	const [y, m, d] = dateStr.split('-');
+	const [, m, d] = dateStr.split('-');
 	const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 	return `${d} ${months[parseInt(m) - 1]}`;
 }

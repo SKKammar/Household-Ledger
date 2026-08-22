@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
 import { members } from '$lib/db/schema';
 import { currentMonthIST } from '$lib/utils/time';
-import { isNull, and, like, eq } from 'drizzle-orm';
+import { isNull, and, eq } from 'drizzle-orm';
 
 export const load = async ({ locals, url }) => {
 	const member = locals.member!;

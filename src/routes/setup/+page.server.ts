@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/db';
 import { members, categories, households } from '$lib/db/schema';
-import { isNull } from 'drizzle-orm';
 import { nowIST } from '$lib/utils/time';
 import { randomUUID } from 'crypto';
 import { sendMagicLink } from '$lib/email';

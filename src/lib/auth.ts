@@ -1,6 +1,5 @@
 import { randomBytes } from 'crypto';
 import { db } from './db';
-import { sessions } from './db/schema';
 
 // Generate a cryptographically secure token
 export function generateToken(): string {
