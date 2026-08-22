@@ -28,6 +28,11 @@
 			<button type="submit">Create Ledger</button>
 		</form>
 	{/if}
+
+	<div style="margin-top: 30px; text-align: center;">
+		<a href="/join">Have an invite code? Join a household</a><br/><br/>
+		<a href="/login">Already have an account? Log in</a>
+	</div>
 </div>
 
 <style>

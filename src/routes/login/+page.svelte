@@ -23,6 +23,11 @@
 			<button type="submit">Send Login Link</button>
 		</form>
 	{/if}
+
+	<div style="margin-top: 30px; text-align: center;">
+		<a href="/join">Have an invite code? Join a household</a><br/><br/>
+		<a href="/setup">Or create a new household</a>
+	</div>
 </div>
 
 <style>
