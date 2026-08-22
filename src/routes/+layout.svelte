@@ -17,7 +17,7 @@
 	});
 
 	// Exclude nav on public routes or print mode
-	$: isPublic = ['/login', '/setup', '/auth/verify'].includes($page.url.pathname);
+	$: isPublic = ['/login', '/setup', '/auth/verify', '/join'].includes($page.url.pathname);
 	$: isPrint = $page.url.searchParams.get('print') === '1';
 	$: showNav = !isPublic && !isPrint;
 </script>
@@ -42,7 +42,7 @@
 			<a href="/admin">Admin</a>
 		</div>
 		<form action="/logout" method="POST" class="logout-form">
-			<button type="submit" class="logout-btn">Logout →</button>
+			<button type="submit" class="logout-btn">Logout</button>
 		</form>
 	</nav>
 {/if}
