@@ -1,12 +1,34 @@
 <script lang="ts">
 	import './styles.css';
-	import { page } from '$app/stores';
+	import { page, navigating } from '$app/stores';
+	import { onNavigate } from '$app/navigation';
+	import { onMount } from 'svelte';
 	
+	// View Transitions API
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
+
 	// Exclude nav on public routes or print mode
 	$: isPublic = ['/login', '/setup', '/auth/verify'].includes($page.url.pathname);
 	$: isPrint = $page.url.searchParams.get('print') === '1';
 	$: showNav = !isPublic && !isPrint;
 </script>
+
+<svelte:head>
+	<meta name="sveltekit:preload-data" content="hover" />
+</svelte:head>
+
+{#if $navigating}
+	<div class="nav-progress"></div>
+{/if}
 
 {#if showNav}
 	<nav class="nav-container">
@@ -81,5 +103,21 @@
 			padding-left: 0;
 			gap: 15px;
 		}
+	}
+	
+	.nav-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 3px;
+		background: var(--ink);
+		width: 100%;
+		animation: progress 800ms ease-out forwards;
+		z-index: 9999;
+	}
+
+	@keyframes progress {
+		from { transform: scaleX(0); transform-origin: left; }
+		to   { transform: scaleX(1); transform-origin: left; }
 	}
 </style>

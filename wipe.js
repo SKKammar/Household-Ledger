@@ -1,5 +1,10 @@
 import { createClient } from '@libsql/client';
 
+if (process.env.NODE_ENV === 'production') {
+    console.error('REFUSED: Do not run wipe.js against production.');
+    process.exit(1);
+}
+
 const client = createClient({
     url: process.env.TURSO_DATABASE_URL,
     authToken: process.env.TURSO_AUTH_TOKEN

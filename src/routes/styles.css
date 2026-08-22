@@ -92,3 +92,26 @@ a:hover {
 .ink-muted {
 	color: var(--ink-muted);
 }
+
+/* Slower, more paper-like feel for View Transitions */
+@view-transition {
+	navigation: auto;
+}
+
+::view-transition-old(root) {
+	animation: fade-out 200ms ease-out;
+}
+
+::view-transition-new(root) {
+	animation: fade-in 200ms ease-in;
+}
+
+@keyframes fade-out {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+@keyframes fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
