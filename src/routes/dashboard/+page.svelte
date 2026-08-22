@@ -8,50 +8,52 @@
 		return date.toLocaleString('default', { month: 'long' });
 	}
 
-	function handleMonthChange(event: Event) {
-		const select = event.target as HTMLSelectElement;
-		const [year, month] = select.value.split('-');
-		goto(`?year=${year}&month=${month}`);
+	function prevMonth() {
+		let y = parseInt(data.selectedYear as string);
+		let m = parseInt(data.selectedMonth as string) - 1;
+		if (m < 1) { m = 12; y--; }
+		goto(`?year=${y}&month=${m}`);
 	}
+
+	function nextMonth() {
+		let y = parseInt(data.selectedYear as string);
+		let m = parseInt(data.selectedMonth as string) + 1;
+		if (m > 12) { m = 1; y++; }
+		goto(`?year=${y}&month=${m}`);
+	}
+
+	$: currentMonthName = getMonthName(data.selectedMonth);
+	$: currentYear = data.selectedYear;
+	$: prevMonthName = getMonthName(data.selectedMonth === 1 ? 12 : data.selectedMonth - 1);
+	$: nextMonthName = getMonthName(data.selectedMonth === 12 ? 1 : data.selectedMonth + 1);
 </script>
 
 <div class="dashboard-container">
 	<div class="header">
-		<h1>Household Dashboard</h1>
-		<div class="month-selector">
-			<select on:change={handleMonthChange}>
-				<option value="{data.selectedYear}-{data.selectedMonth}" selected>
-					{getMonthName(data.selectedMonth)} {data.selectedYear}
-				</option>
-				<!-- Generate a few previous months for demonstration -->
-				{#each Array(6) as _, i}
-					{@const d = new Date(data.selectedYear, data.selectedMonth - 1 - (i+1))}
-					<option value="{d.getFullYear()}-{d.getMonth() + 1}">
-						{getMonthName(d.getMonth() + 1)} {d.getFullYear()}
-					</option>
-				{/each}
-			</select>
+		<div class="month-switcher">
+			<button on:click={prevMonth} class="month-nav">← {prevMonthName}</button>
+			<span class="month-current">{currentMonthName} {currentYear}</span>
+			<button on:click={nextMonth} class="month-nav">{nextMonthName} →</button>
 		</div>
 	</div>
 
 	<div class="actions">
-		<a href="/expenses" class="button">Record New Expense</a>
+		<a href="/expenses" class="btn-primary">Record New Expense</a>
 	</div>
 
 	<div class="members-grid">
 		{#each data.memberData as { member, totalPaid, netShare }}
-			<div class="member-card">
+			<div class="member-card" style="--member-color: {member.avatarColor}">
 				<div class="member-header">
-					<div class="avatar" style="background-color: {member.avatarColor}">{member.name.charAt(0)}</div>
 					<h2>{member.name}</h2>
 				</div>
 				<div class="stats">
 					<div class="stat-box">
-						<span class="ink-muted">Total Paid</span>
+						<span class="ink-muted stat-label">Total Paid</span>
 						<span class="amount">₹{totalPaid.toFixed(2)}</span>
 					</div>
 					<div class="stat-box">
-						<span class="ink-muted">Net Share</span>
+						<span class="ink-muted stat-label">Net Share</span>
 						<span class="amount highlight">₹{netShare.toFixed(2)}</span>
 					</div>
 				</div>
@@ -70,23 +72,39 @@
 		padding: 20px;
 	}
 	.header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		margin-bottom: 30px;
 		padding-bottom: 20px;
 		border-bottom: 2px solid var(--rule, #c8b99a);
+		display: flex;
+		justify-content: center;
+	}
+	.month-switcher {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+	.month-nav {
+		font-family: 'Special Elite', cursive;
+		font-size: 10px;
+		letter-spacing: 0.1em;
+		color: #9c8f78;
+		background: none;
+		border: none;
+		cursor: pointer;
+		transition: color 0.15s;
+	}
+	.month-nav:hover { color: #2c2518; }
+	.month-current {
+		font-family: 'Playfair Display', serif;
+		font-size: 24px; /* Increased size to match h1-ish feel */
+		font-weight: bold;
+		color: #2c2518;
+		min-width: 220px;
+		text-align: center;
 	}
 	.actions {
 		margin-bottom: 30px;
-	}
-	.button {
-		display: inline-block;
-		padding: 10px 20px;
-		background: var(--stamp-blue, #2a4a6b);
-		color: white;
-		text-decoration: none;
-		border-radius: 2px;
+		text-align: center;
 	}
 	.members-grid {
 		display: grid;
@@ -94,26 +112,25 @@
 		gap: 20px;
 	}
 	.member-card {
-		background: var(--paper-dark, #e4dccc);
-		padding: 20px;
-		border-radius: 4px;
+		border: 1px solid #c8b99a;
+		border-radius: 0;
+		padding: 14px 16px;
+		position: relative;
+		overflow: hidden;
+		background: transparent;
+	}
+	.member-card::before {
+		content: '';
+		position: absolute;
+		left: 0; top: 0; bottom: 0;
+		width: 4px;
+		background: var(--member-color);
 	}
 	.member-header {
-		display: flex;
-		align-items: center;
-		gap: 15px;
 		margin-bottom: 20px;
 	}
-	.avatar {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: white;
-		font-weight: bold;
-		font-size: 1.2em;
+	.member-header h2 {
+		margin: 0;
 	}
 	.stats {
 		display: flex;
@@ -124,8 +141,15 @@
 		display: flex;
 		flex-direction: column;
 	}
+	.stat-label {
+		font-family: 'Special Elite', cursive;
+		font-size: 10px;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+		margin-bottom: 4px;
+	}
 	.amount {
-		font-size: 1.2em;
+		font-size: 1.6em;
 		font-weight: bold;
 		font-family: 'Special Elite', cursive;
 	}
@@ -135,5 +159,7 @@
 	.actions-link a {
 		color: var(--ink, #2c2518);
 		text-decoration: underline;
+		font-family: 'Special Elite', cursive;
+		font-size: 12px;
 	}
 </style>

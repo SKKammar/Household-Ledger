@@ -64,6 +64,35 @@ a:hover {
 	text-decoration: underline;
 }
 
+/* Stamp Button */
+.btn-primary {
+	background: #2c2518;
+	color: #f0ebe0;
+	border: none;
+	padding: 10px 24px;
+	font-family: 'Special Elite', cursive;
+	font-size: 11px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transform: rotate(-0.5deg);
+	border-radius: 0;
+	transition: transform 0.15s;
+}
+.btn-primary:hover {
+	transform: rotate(0deg);
+}
+.btn-primary:active {
+	transform: rotate(0.5deg) scale(0.98);
+}
+.btn-primary {
+	display: inline-block;
+	text-decoration: none;
+}
+.btn-primary:hover {
+	text-decoration: none;
+}
+
 /* Margin line */
 .page-container {
 	border-left: 2px solid var(--stamp-red);

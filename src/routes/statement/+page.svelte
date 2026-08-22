@@ -29,7 +29,7 @@
 
 	{#if !printMode}
 		<div class="no-print">
-			<a href="?print=1&year={data.year}&month={data.month}" class="button">Print View</a>
+			<a href="?print=1&year={data.year}&month={data.month}" class="btn-primary">Print View</a>
 		</div>
 	{/if}
 

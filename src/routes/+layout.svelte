@@ -40,6 +40,9 @@
 			<a href="/expenses">Record Expense</a>
 			<a href="/statement">My Statement</a>
 			<a href="/admin">Admin</a>
+			<form action="/logout" method="POST" style="display:inline; margin:0; padding:0;">
+				<button type="submit">Logout</button>
+			</form>
 		</div>
 	</nav>
 {/if}
@@ -50,11 +53,12 @@
 
 <style>
 	.nav-container {
-		background: var(--paper-dark);
+		background: var(--paper);
 		padding: 15px 52px; /* aligns with margin */
-		border-bottom: 2px double var(--rule);
+		border-bottom: 1px solid var(--rule);
 		margin-bottom: 20px;
 		position: relative;
+		color: var(--ink);
 	}
 	.nav-links {
 		display: flex;
@@ -62,19 +66,21 @@
 		gap: 20px;
 		padding-left: 28px;
 	}
-	.nav-links a {
+	.nav-links a, .nav-links button, .back-btn {
 		font-family: 'Special Elite', cursive;
-		color: var(--ink);
+		font-size: 10px;
+		letter-spacing: 0.15em;
 		text-transform: uppercase;
-		font-size: 0.9rem;
+		color: var(--ink-muted);
+		text-decoration: none;
+		transition: color 0.15s;
 		background: none;
 		border: none;
 		padding: 0;
 		cursor: pointer;
 	}
-	.nav-links a:hover {
-		color: var(--stamp-red);
-		text-decoration: none;
+	.nav-links a:hover, .nav-links button:hover, .back-btn:hover {
+		color: var(--ink);
 	}
 	.back-btn {
 		position: absolute;
@@ -82,17 +88,6 @@
 		top: 50%;
 		transform: translateY(-50%);
 		font-weight: bold;
-		font-family: 'Special Elite', cursive;
-		color: var(--ink);
-		text-transform: uppercase;
-		font-size: 0.9rem;
-		background: none;
-		border: none;
-		padding: 0;
-		cursor: pointer;
-	}
-	.back-btn:hover {
-		color: var(--stamp-red);
 	}
 
 	@media (max-width: 600px) {
