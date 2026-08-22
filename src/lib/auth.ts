@@ -25,7 +25,8 @@ export async function getMemberFromSession(sessionToken: string | undefined) {
 		with: { member: true },
 	});
 	
-	return result?.member ?? null;
+	if (!result?.member || result.member.deletedAt) return null;
+	return result.member;
 }
 
 // Validate a magic link token
@@ -36,7 +37,7 @@ export async function validateMagicToken(token: string) {
 		with: { member: true },
 	});
 	
-	if (!link) return { error: 'not_found' };
+	if (!link || !link.member || link.member.deletedAt) return { error: 'not_found' };
 	if (link.used) return { error: 'already_used' };
 	if (link.expiresAt < now) return { error: 'expired' };
 	

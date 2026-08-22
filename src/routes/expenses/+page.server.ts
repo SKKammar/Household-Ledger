@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
 import { members, categories, expenses, expenseSplits } from '$lib/db/schema';
 import { isNull, and, ne } from 'drizzle-orm';
-import { nowIST, todayIST } from '$lib/utils/time';
+import { nowIST, todayIST, isCurrentMonthIST } from '$lib/utils/time';
 import { randomUUID } from 'crypto';
 import { redirect } from '@sveltejs/kit';
 
@@ -42,6 +42,9 @@ export const actions = {
 		}
 		if (isSplit && splitMemberIds.length === 0) {
 			return { error: 'Select at least one member to split with.' };
+		}
+		if (!isCurrentMonthIST(date)) {
+			return { error: 'You can only record expenses for the current month.' };
 		}
 
 		const currentMember = locals.member!;
