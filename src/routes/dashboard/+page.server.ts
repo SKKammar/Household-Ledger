@@ -16,9 +16,10 @@ export const load = async ({ locals, url }) => {
 	const prefix = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
 	
 	// Get all active members in the same household
+	// Get all members in the household (including deleted) to retain historical data
 	const allMembers = await db.select()
 		.from(members)
-		.where(memberScope(member.householdId));
+		.where(eq(members.householdId, member.householdId));
 		
 	// For each member, get their expenses in the selected period
 	const memberData = await Promise.all(
@@ -33,17 +34,27 @@ export const load = async ({ locals, url }) => {
 				orderBy: (e, { asc }) => asc(e.date),
 			});
 			
+			const splitsReceived = await db.query.expenseSplits.findMany({
+				where: (es, { eq }) => eq(es.memberId, m.id),
+				with: { expense: true }
+			});
+			const filteredSplits = splitsReceived.filter(s => s.expense.householdId === member.householdId && s.expense.date.startsWith(prefix));
+			const splitsSum = filteredSplits.reduce((sum, s) => sum + s.shareAmount, 0);
+
 			const totalPaid = memberExpenses.reduce((sum, e) => sum + e.amount, 0);
 			const netShare = memberExpenses.reduce((sum, e) => {
 				if (e.isSplit && e.splitAmong) {
 					return sum + (e.amount / e.splitAmong);
 				}
 				return sum + e.amount;
-			}, 0);
+			}, splitsSum);
 			
 			return { member: m, expenses: memberExpenses, totalPaid, netShare };
 		})
 	);
 	
-	return { memberData, selectedYear, selectedMonth };
+	// Only show members who are active OR have financial activity in this month
+	const activeMemberData = memberData.filter(m => !m.member.deletedAt || m.totalPaid > 0 || m.netShare > 0);
+	
+	return { memberData: activeMemberData, selectedYear, selectedMonth };
 };

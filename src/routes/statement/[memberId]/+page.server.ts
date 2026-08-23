@@ -25,7 +25,10 @@ export const load = async ({ params, url, locals }) => {
 			expenseScope(locals.member!.householdId),
 			like(e.date, `${prefix}%`)
 		),
-		with: { category: true },
+		with: { 
+			category: true,
+			splits: { with: { member: true } }
+		},
 		orderBy: (e, { asc }) => asc(e.date),
 	});
 
@@ -48,9 +51,10 @@ export const load = async ({ params, url, locals }) => {
 	);
 
 	const totalPaid = ownExpenses.reduce((sum, e) => sum + e.amount, 0);
+	const splitsReceivedSum = filteredSplits.reduce((sum, s) => sum + s.shareAmount, 0);
 	const netShare = ownExpenses.reduce((sum, e) => {
 		return sum + (e.isSplit && e.splitAmong ? e.amount / e.splitAmong : e.amount);
-	}, 0);
+	}, splitsReceivedSum);
 
 	return { 
 		targetMember, 

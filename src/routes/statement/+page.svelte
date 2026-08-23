@@ -46,7 +46,11 @@
 				<div class="expense-amount">₹{expense.amount.toFixed(2)}</div>
 				<div class="expense-note">
 					{#if expense.note}{expense.note}{/if}
-					{#if expense.isSplit}<span class="split-badge">(split among {expense.splitAmong})</span>{/if}
+					{#if expense.isSplit}
+						<span class="split-badge">
+							(split with {expense.splits?.map(s => s.member.name).join(', ') || 'others'})
+						</span>
+					{/if}
 					{#if !data.readOnly && expense.isEditable && !printMode}
 						<a href="/expenses/{expense.id}/edit" class="edit-link">[Edit]</a>
 					{/if}

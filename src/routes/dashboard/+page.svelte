@@ -45,7 +45,12 @@
 		{#each data.memberData as { member, totalPaid, netShare }}
 			<div class="member-card" style="--member-color: {member.avatarColor}">
 				<div class="member-header">
-					<h2>{member.name}</h2>
+					<h2>
+						{member.name}
+						{#if member.deletedAt}
+							<span class="deleted-badge">REMOVED</span>
+						{/if}
+					</h2>
 				</div>
 				<div class="stats">
 					<div class="stat-box">
@@ -161,6 +166,16 @@
 		text-decoration: underline;
 		font-family: 'Special Elite', cursive;
 		font-size: 12px;
+	}
+	.deleted-badge {
+		font-size: 0.4em;
+		padding: 2px 6px;
+		border-radius: 4px;
+		margin-left: 10px;
+		font-family: 'Special Elite', cursive;
+		background: var(--stamp-red, #8b3a2a);
+		color: white;
+		vertical-align: middle;
 	}
 
 	@media (max-width: 600px) {

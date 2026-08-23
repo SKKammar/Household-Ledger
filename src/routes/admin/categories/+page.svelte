@@ -77,4 +77,20 @@
 		color: var(--stamp-red, #8b3a2a);
 		margin-bottom: 20px;
 	}
+
+	@media (max-width: 600px) {
+		.categories-container {
+			padding: 0;
+			margin: 0 auto;
+		}
+		.category-item {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+		}
+		.rename-form {
+			margin-right: 0;
+			width: 100%;
+		}
+	}
 </style>
