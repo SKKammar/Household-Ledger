@@ -1,7 +1,8 @@
 import { db } from '$lib/db';
 import { members } from '$lib/db/schema';
 import { currentMonthIST } from '$lib/utils/time';
-import { isNull, and, eq } from 'drizzle-orm';
+import { isNull, and, eq, like } from 'drizzle-orm';
+import { memberScope } from '$lib/db/scope';
 
 export const load = async ({ locals, url }) => {
 	const member = locals.member!;
@@ -17,16 +18,14 @@ export const load = async ({ locals, url }) => {
 	// Get all active members in the same household
 	const allMembers = await db.select()
 		.from(members)
-		.where(and(
-			eq(members.householdId, member.householdId),
-			isNull(members.deletedAt)
-		));
+		.where(memberScope(member.householdId));
 		
 	// For each member, get their expenses in the selected period
 	const memberData = await Promise.all(
 		allMembers.map(async (m) => {
 			const memberExpenses = await db.query.expenses.findMany({
 				where: (e, { eq, like, and }) => and(
+					eq(e.householdId, member.householdId),
 					eq(e.memberId, m.id),
 					like(e.date, `${prefix}%`)
 				),

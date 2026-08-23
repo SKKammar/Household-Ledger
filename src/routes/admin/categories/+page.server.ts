@@ -4,14 +4,12 @@ import { eq, isNull, and } from 'drizzle-orm';
 import { nowIST } from '$lib/utils/time';
 import { randomUUID } from 'crypto';
 import { error } from '@sveltejs/kit';
+import { categoryScope } from '$lib/db/scope';
 
 export const load = async ({ locals }) => {
 	const activeCategories = await db.select()
 		.from(categories)
-		.where(and(
-			eq(categories.householdId, locals.member!.householdId),
-			isNull(categories.deletedAt)
-		));
+		.where(categoryScope(locals.member!.householdId));
 
 	return { categories: activeCategories };
 };

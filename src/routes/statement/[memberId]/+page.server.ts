@@ -1,6 +1,7 @@
 import { db } from '$lib/db';
 import { currentMonthIST } from '$lib/utils/time';
 import { error } from '@sveltejs/kit';
+import { expenseScope } from '$lib/db/scope';
 
 export const load = async ({ params, url, locals }) => {
 	const targetMember = await db.query.members.findFirst({
@@ -21,6 +22,7 @@ export const load = async ({ params, url, locals }) => {
 	const rawExpenses = await db.query.expenses.findMany({
 		where: (e, { eq, like, and }) => and(
 			eq(e.memberId, targetMember.id),
+			expenseScope(locals.member!.householdId),
 			like(e.date, `${prefix}%`)
 		),
 		with: { category: true },

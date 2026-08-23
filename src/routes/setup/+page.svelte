@@ -16,6 +16,11 @@
 	{:else}
 		<form method="POST" use:enhance>
 			<div class="form-group">
+				<label for="householdName">Household Name</label>
+				<input type="text" id="householdName" name="householdName" required placeholder="e.g. Kammar Family" />
+			</div>
+
+			<div class="form-group">
 				<label for="name">Your Name</label>
 				<input type="text" id="name" name="name" required />
 			</div>

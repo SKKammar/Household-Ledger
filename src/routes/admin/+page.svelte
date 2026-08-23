@@ -1,7 +1,16 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	export let data;
 	export let form: { error?: string; success?: boolean } | null;
+
+	let copied = false;
+	function copyLink() {
+		const link = `${$page.url.origin}/join?code=${data.inviteCode}`;
+		navigator.clipboard.writeText(link);
+		copied = true;
+		setTimeout(() => copied = false, 2000);
+	}
 </script>
 
 <svelte:head>
@@ -16,13 +25,23 @@
 	{/if}
 
 	<div class="admin-section">
-		<h2>Household Invite Code</h2>
-		<p>Share this code with members so they can join at <code>/join</code>.</p>
-		<div class="invite-code-container">
-			<span class="invite-code">{data.inviteCode}</span>
-			<form method="POST" action="?/regenerateInviteCode" use:enhance>
-				<button type="submit" class="small-btn">Regenerate Code</button>
-			</form>
+		<h2>Household Settings</h2>
+		<form method="POST" action="?/updateHouseholdName" use:enhance class="add-form">
+			<input type="text" name="householdName" value={data.householdName} required />
+			<button type="submit">Save Name</button>
+		</form>
+		
+		<div style="margin-top: 20px;">
+			<p>Invite Code: <strong>{data.inviteCode}</strong></p>
+			<p>Share link: <code>{$page.url.origin}/join?code={data.inviteCode}</code></p>
+			<div class="invite-code-container">
+				<button type="button" class="small-btn" on:click={copyLink}>
+					{copied ? 'Copied!' : 'Copy Link'}
+				</button>
+				<form method="POST" action="?/regenerateInviteCode" use:enhance>
+					<button type="submit" class="small-btn">Regenerate Code</button>
+				</form>
+			</div>
 		</div>
 	</div>
 
@@ -116,14 +135,6 @@
 		align-items: center;
 		gap: 15px;
 		margin-top: 10px;
-	}
-	.invite-code {
-		font-family: 'Special Elite', cursive;
-		font-size: 1.5em;
-		background: #fff;
-		padding: 5px 15px;
-		border: 1px dashed var(--stamp-blue, #2a4a6b);
-		letter-spacing: 2px;
 	}
 	.member-row {
 		display: flex;

@@ -4,20 +4,17 @@ import { isNull, and, ne, eq, inArray } from 'drizzle-orm';
 import { nowIST, todayIST, isCurrentMonthIST } from '$lib/utils/time';
 import { randomUUID } from 'crypto';
 import { redirect } from '@sveltejs/kit';
+import { memberScope, categoryScope } from '$lib/db/scope';
 
 export const load = async ({ locals }) => {
 	const activeCategories = await db.select()
 		.from(categories)
-		.where(and(
-			eq(categories.householdId, locals.member!.householdId),
-			isNull(categories.deletedAt)
-		));
+		.where(categoryScope(locals.member!.householdId));
 
 	const activeMembers = await db.select()
 		.from(members)
 		.where(and(
-			eq(members.householdId, locals.member!.householdId),
-			isNull(members.deletedAt),
+			memberScope(locals.member!.householdId),
 			ne(members.id, locals.member!.id)
 		));
 
@@ -58,8 +55,7 @@ export const actions = {
 			const validMembers = await db.select()
 				.from(members)
 				.where(and(
-					eq(members.householdId, currentMember.householdId),
-					isNull(members.deletedAt),
+					memberScope(currentMember.householdId),
 					inArray(members.id, splitMemberIds)
 				));
 			if (validMembers.length !== splitMemberIds.length) {

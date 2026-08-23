@@ -1,7 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { getMemberFromSession } from '$lib/auth';
 import { db } from '$lib/db';
-import { sessions } from '$lib/db/schema';
+import { sessions, households } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 const PUBLIC_ROUTES = ['/login', '/auth/verify', '/setup', '/join'];
@@ -10,6 +10,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get('session');
 	const member = await getMemberFromSession(sessionToken);
 	event.locals.member = member;
+
+	if (member) {
+		const household = await db.query.households.findFirst({
+			where: (h, { eq }) => eq(h.id, member.householdId)
+		});
+		event.locals.household = household || null;
+	} else {
+		event.locals.household = null;
+	}
 
 	// Rolling session — extend on every valid request
 	if (member && sessionToken) {

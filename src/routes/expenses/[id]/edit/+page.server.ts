@@ -1,14 +1,15 @@
 import { db } from '$lib/db';
 import { expenses, expenseSplits } from '$lib/db/schema';
 import { isCurrentMonthIST } from '$lib/utils/time';
-import { error, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
+import { expenseScope } from '$lib/db/scope';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load = async ({ params, locals }) => {
 	const expense = await db.query.expenses.findFirst({
 		where: (e, { eq, and }) => and(
 			eq(e.id, params.id),
-			eq(e.householdId, locals.member!.householdId)
+			expenseScope(locals.member!.householdId)
 		),
 	});
 
@@ -34,7 +35,7 @@ export const actions = {
 		const expense = await db.query.expenses.findFirst({
 			where: (e, { eq, and }) => and(
 				eq(e.id, params.id),
-				eq(e.householdId, locals.member!.householdId)
+				expenseScope(locals.member!.householdId)
 			),
 		});
 

@@ -4,6 +4,7 @@ import { eq, isNull, and, ne, inArray } from 'drizzle-orm';
 import { nowIST } from '$lib/utils/time';
 import { randomUUID } from 'crypto';
 import { sendMagicLink } from '$lib/email';
+import { memberScope } from '$lib/db/scope';
 import { redirect, error } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
@@ -15,7 +16,7 @@ export const load = async ({ locals }) => {
 
 	const allMembers = await db.select()
 		.from(members)
-		.where(eq(members.householdId, locals.member!.householdId))
+		.where(memberScope(locals.member!.householdId))
 		.orderBy(members.createdAt);
 	
 	const activeMembers = allMembers.filter(m => !m.deletedAt);
@@ -23,7 +24,8 @@ export const load = async ({ locals }) => {
 	return {
 		allMembers,
 		isOnlyAdmin: activeMembers.length === 1 && locals.member.isAdmin === 1,
-		inviteCode: household?.inviteCode
+		inviteCode: household?.inviteCode,
+		householdName: household?.name
 	};
 };
 
@@ -38,6 +40,19 @@ function generateInviteCode(): string {
 }
 
 export const actions = {
+	updateHouseholdName: async ({ request, locals }) => {
+		if (!locals.member?.isAdmin) throw error(403);
+		
+		const name = (await request.formData()).get('householdName') as string;
+		if (!name?.trim()) return { error: 'Household name is required.' };
+		
+		await db.update(households)
+			.set({ name: name.trim() })
+			.where(eq(households.id, locals.member!.householdId));
+			
+		return { success: true };
+	},
+
 	addMember: async ({ request, locals }) => {
 		if (!locals.member?.isAdmin) throw error(403);
 		
@@ -99,9 +114,8 @@ export const actions = {
 		const otherAdmins = await db.select()
 			.from(members)
 			.where(and(
-				eq(members.householdId, locals.member!.householdId),
+				memberScope(locals.member!.householdId),
 				eq(members.isAdmin, 1),
-				isNull(members.deletedAt),
 				ne(members.id, locals.member!.id)
 			));
 
@@ -131,10 +145,7 @@ export const actions = {
 
 		const activeMembers = await db.select()
 			.from(members)
-			.where(and(
-				eq(members.householdId, locals.member!.householdId),
-				isNull(members.deletedAt)
-			));
+			.where(memberScope(locals.member!.householdId));
 
 		if (activeMembers.length <= 1) {
 			return { error: 'Cannot remove the last member.' };

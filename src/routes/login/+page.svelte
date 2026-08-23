@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	export let form: { error?: string; success?: boolean; message?: string } | null;
+	export let form: { error?: string; success?: boolean; message?: string; households?: any[]; email?: string } | null;
 </script>
 
 <div class="login-container">
@@ -13,8 +13,21 @@
 	
 	{#if form?.success}
 		<div class="success-stamp">{form.message}</div>
+	{:else if form?.households}
+		<div class="form-group">
+			<p class="ink-muted">You belong to multiple households. Which one are you logging into?</p>
+		</div>
+		<div class="household-picker">
+			{#each form.households as household}
+				<form method="POST" action="?/selectHousehold" use:enhance class="picker-form">
+					<input type="hidden" name="memberId" value={household.memberId} />
+					<input type="hidden" name="email" value={form.email} />
+					<button type="submit" class="household-btn">{household.name}</button>
+				</form>
+			{/each}
+		</div>
 	{:else}
-		<form method="POST" use:enhance>
+		<form method="POST" action="?/default" use:enhance>
 			<div class="form-group">
 				<label for="email">Email</label>
 				<input type="email" id="email" name="email" required />
@@ -54,6 +67,27 @@
 	.success-stamp {
 		color: var(--stamp-green, #3a6b4a);
 		margin-bottom: 20px;
+	}
+	.household-picker {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 20px;
+	}
+	.picker-form {
+		margin: 0;
+	}
+	.household-btn {
+		width: 100%;
+		text-align: left;
+		padding: 12px 15px;
+		background: #fff;
+		border-radius: 4px;
+		transition: all 0.2s;
+	}
+	.household-btn:hover {
+		background: var(--paper-dark);
+		transform: translateX(4px);
 	}
 
 	@media (max-width: 600px) {

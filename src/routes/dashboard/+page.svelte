@@ -9,15 +9,15 @@
 	}
 
 	function prevMonth() {
-		let y = parseInt(data.selectedYear as string);
-		let m = parseInt(data.selectedMonth as string) - 1;
+		let y = data.selectedYear;
+		let m = data.selectedMonth - 1;
 		if (m < 1) { m = 12; y--; }
 		goto(`?year=${y}&month=${m}`);
 	}
 
 	function nextMonth() {
-		let y = parseInt(data.selectedYear as string);
-		let m = parseInt(data.selectedMonth as string) + 1;
+		let y = data.selectedYear;
+		let m = data.selectedMonth + 1;
 		if (m > 12) { m = 1; y++; }
 		goto(`?year=${y}&month=${m}`);
 	}

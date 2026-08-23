@@ -1,5 +1,6 @@
 import { db } from '$lib/db';
 import { currentMonthIST, isCurrentMonthIST } from '$lib/utils/time';
+import { expenseScope } from '$lib/db/scope';
 
 export const load = async ({ locals, url }) => {
 	const member = locals.member!;
@@ -14,7 +15,7 @@ export const load = async ({ locals, url }) => {
 	const rawExpenses = await db.query.expenses.findMany({
 		where: (e, { eq, like, and }) => and(
 			eq(e.memberId, member.id),
-			eq(e.householdId, member.householdId),
+			expenseScope(member.householdId),
 			like(e.date, `${prefix}%`)
 		),
 		with: { category: true },

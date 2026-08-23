@@ -66,7 +66,7 @@
 		justify-content: center;
 		gap: 20px;
 	}
-	.nav-links a, .nav-links button, .back-btn, .logout-btn {
+	.nav-links a, .back-btn, .logout-btn {
 		font-family: 'Special Elite', cursive;
 		font-size: 10px;
 		letter-spacing: 0.15em;
@@ -79,7 +79,7 @@
 		padding: 0;
 		cursor: pointer;
 	}
-	.nav-links a:hover, .nav-links button:hover, .back-btn:hover, .logout-btn:hover, .nav-links a.active {
+	.nav-links a:hover, .back-btn:hover, .logout-btn:hover, .nav-links a.active {
 		color: var(--ink);
 	}
 	.nav-links a.active {

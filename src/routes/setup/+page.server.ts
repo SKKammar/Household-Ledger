@@ -20,9 +20,10 @@ export const actions = {
 		const data = await request.formData();
 		const name = data.get('name') as string;
 		const email = data.get('email') as string;
+		const householdName = data.get('householdName') as string;
 
-		if (!name?.trim() || !email?.trim()) {
-			return { error: 'Name and email are required' };
+		if (!name?.trim() || !email?.trim() || !householdName?.trim()) {
+			return { error: 'Household name, your name, and email are required' };
 		}
 
 
@@ -34,7 +35,7 @@ export const actions = {
 		await db.transaction(async (tx) => {
 			await tx.insert(households).values({
 				id: householdId,
-				name: 'My Household', // Default name
+				name: householdName.trim(),
 				inviteCode: generateInviteCode(),
 				createdAt: now,
 			});
