@@ -109,8 +109,8 @@
 
 	@media (max-width: 600px) {
 		.expense-form-container {
-			padding: 15px;
-			margin: 20px auto;
+			padding: 0;
+			margin: 0 auto;
 		}
 	}
 </style>

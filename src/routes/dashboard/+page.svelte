@@ -165,8 +165,8 @@
 
 	@media (max-width: 600px) {
 		.dashboard-container {
-			padding: 10px;
-			margin: 20px auto;
+			padding: 0;
+			margin: 0 auto;
 		}
 		.month-switcher {
 			flex-wrap: wrap;

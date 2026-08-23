@@ -202,8 +202,8 @@
 
 	@media (max-width: 600px) {
 		.admin-container {
-			padding: 10px;
-			margin: 20px auto;
+			padding: 0;
+			margin: 0 auto;
 		}
 		.add-form {
 			flex-direction: column;

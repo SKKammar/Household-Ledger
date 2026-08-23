@@ -31,17 +31,24 @@
 {/if}
 
 {#if showNav}
+	<header class="mobile-header">
+		<span class="app-title">Household Ledger</span>
+		<form action="/logout" method="POST" class="mobile-logout">
+			<button type="submit" class="logout-btn">Logout</button>
+		</form>
+	</header>
+
 	<nav class="nav-container">
 		{#if $page.url.pathname !== '/dashboard'}
 			<button type="button" on:click={() => window.history.back()} class="back-btn">← Back</button>
 		{/if}
 		<div class="nav-links">
 			<a href="/dashboard" class:active={$page.url.pathname === '/dashboard'}>Dashboard</a>
-			<a href="/expenses" class:active={$page.url.pathname.startsWith('/expenses')}>Record Expense</a>
-			<a href="/statement" class:active={$page.url.pathname.startsWith('/statement')}>My Statement</a>
+			<a href="/expenses" class:active={$page.url.pathname.startsWith('/expenses')}>Record</a>
+			<a href="/statement" class:active={$page.url.pathname.startsWith('/statement')}>Statement</a>
 			<a href="/admin" class:active={$page.url.pathname.startsWith('/admin')}>Admin</a>
 		</div>
-		<form action="/logout" method="POST" class="logout-form">
+		<form action="/logout" method="POST" class="logout-form desktop-only">
 			<button type="submit" class="logout-btn">Logout</button>
 		</form>
 	</nav>
@@ -105,26 +112,65 @@
 		font-weight: bold;
 	}
 
+	.mobile-header {
+		display: none;
+	}
+
 	@media (max-width: 600px) {
-		.nav-container {
-			padding: 15px;
+		.mobile-header {
 			display: flex;
-			flex-direction: column;
+			justify-content: space-between;
 			align-items: center;
-			gap: 15px;
+			padding: 15px 20px;
+			background: var(--paper);
+			border-bottom: 1px solid var(--rule);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+		.app-title {
+			font-family: 'Playfair Display', serif;
+			font-weight: 600;
+			font-size: 1.2rem;
+			color: var(--ink);
+		}
+		.desktop-only {
+			display: none;
+		}
+		.nav-container {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			margin-bottom: 0;
+			padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+			border-bottom: none;
+			border-top: 1px solid var(--rule);
+			z-index: 100;
+			background: var(--paper);
+			display: flex;
+			justify-content: center;
 		}
 		.nav-links {
-			padding-left: 0;
-			gap: 15px;
+			width: 100%;
+			justify-content: space-around;
+			gap: 0;
+		}
+		.nav-links a {
+			flex: 1;
+			text-align: center;
+			padding: 10px 5px;
+			font-size: 11px;
+		}
+		.nav-links a.active {
+			border-bottom: none;
+			padding-bottom: 10px;
+			color: var(--ink);
+			background: var(--paper-dark);
+			border-radius: 4px;
 		}
 		.back-btn {
-			position: static;
-			transform: none;
-			align-self: flex-start;
-		}
-		.logout-form {
-			position: static;
-			transform: none;
+			display: none; /* Let them use browser back on mobile or native swipe */
 		}
 	}
 	

@@ -202,8 +202,8 @@
 
 	@media (max-width: 600px) {
 		.statement-wrapper {
-			padding: 20px;
-			margin: 20px auto;
+			padding: 15px;
+			margin: 0 auto;
 		}
 		.statement-header {
 			flex-direction: column;
