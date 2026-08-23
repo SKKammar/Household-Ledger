@@ -73,4 +73,11 @@
 		color: var(--stamp-green, #3a6b4a);
 		margin-bottom: 20px;
 	}
+
+	@media (max-width: 600px) {
+		.join-container {
+			padding: 15px;
+			margin: 20px auto;
+		}
+	}
 </style>

@@ -106,4 +106,11 @@
 		color: var(--stamp-red, #8b3a2a);
 		margin-bottom: 20px;
 	}
+
+	@media (max-width: 600px) {
+		.expense-form-container {
+			padding: 15px;
+			margin: 20px auto;
+		}
+	}
 </style>

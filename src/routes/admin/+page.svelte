@@ -188,4 +188,23 @@
 		color: var(--stamp-red, #8b3a2a);
 		margin-bottom: 20px;
 	}
+
+	@media (max-width: 600px) {
+		.admin-container {
+			padding: 10px;
+			margin: 20px auto;
+		}
+		.add-form {
+			flex-direction: column;
+		}
+		.member-row {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+		}
+		.invite-code-container {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+	}
 </style>

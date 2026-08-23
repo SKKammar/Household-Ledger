@@ -107,11 +107,24 @@
 
 	@media (max-width: 600px) {
 		.nav-container {
-			padding: 15px 15px;
+			padding: 15px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
 		}
 		.nav-links {
 			padding-left: 0;
 			gap: 15px;
+		}
+		.back-btn {
+			position: static;
+			transform: none;
+			align-self: flex-start;
+		}
+		.logout-form {
+			position: static;
+			transform: none;
 		}
 	}
 	

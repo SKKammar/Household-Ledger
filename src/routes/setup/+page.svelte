@@ -60,4 +60,11 @@
 		color: var(--stamp-green, #3a6b4a);
 		margin-bottom: 20px;
 	}
+
+	@media (max-width: 600px) {
+		.setup-container {
+			padding: 15px;
+			margin: 20px auto;
+		}
+	}
 </style>

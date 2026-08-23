@@ -162,4 +162,23 @@
 		font-family: 'Special Elite', cursive;
 		font-size: 12px;
 	}
+
+	@media (max-width: 600px) {
+		.dashboard-container {
+			padding: 10px;
+			margin: 20px auto;
+		}
+		.month-switcher {
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 10px;
+		}
+		.month-current {
+			min-width: auto;
+			font-size: 20px;
+		}
+		.members-grid {
+			grid-template-columns: 1fr;
+		}
+	}
 </style>
