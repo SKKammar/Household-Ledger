@@ -8,58 +8,57 @@ export const load = async ({ locals }) => {
 };
 
 export const actions = {
-	default: async ({ request }) => {
+	findHouseholds: async ({ request }) => {
 		const data = await request.formData();
-		const email = data.get('email') as string;
+		const email = (data.get('email') as string)?.trim().toLowerCase();
 
-		if (!email?.trim()) {
-			return { error: 'Email is required' };
-		}
+		if (!email) return { error: 'Enter your email.' };
 
-		const memberRecords = await db.query.members.findMany({
-			where: (m, { eq, and, isNull }) => and(
-				eq(m.email, email.trim().toLowerCase()),
+		const memberships = await db.query.members.findMany({
+			where: (m, { eq, isNull, and }) => and(
+				eq(m.email, email),
 				isNull(m.deletedAt)
 			),
 			with: { household: true }
 		});
 
-		if (memberRecords.length === 0) {
+		if (memberships.length === 0) {
 			return { error: 'This email is not registered in any household.' };
 		}
 
-		if (memberRecords.length === 1) {
-			const member = memberRecords[0];
-			const result = await sendMagicLink(email.trim().toLowerCase(), member.id);
-
-			if (!result.success) {
-				return { error: 'Could not send email. Try again in a moment.' };
-			}
-
-			return { success: true, message: 'Check your email for the login link.' };
+		if (memberships.length === 1) {
+			await sendMagicLink(email, memberships[0].id);
+			return { sent: true };
 		}
 
-		return { 
-			households: memberRecords.map(m => ({
-				id: m.household.id,
-				name: m.household.name,
-				memberId: m.id
+		return {
+			households: memberships.map(m => ({
+				memberId: m.id,
+				householdName: m.household.name,
+				createdAt: m.household.createdAt
 			})),
-			email: email.trim().toLowerCase()
+			email
 		};
 	},
 
-	selectHousehold: async ({ request }) => {
+	sendLink: async ({ request }) => {
 		const data = await request.formData();
 		const memberId = data.get('memberId') as string;
-		const email = data.get('email') as string;
 
-		if (!memberId || !email) return { error: 'Missing information.' };
+		if (!memberId) return { error: 'Select a household.' };
 
-		const result = await sendMagicLink(email.trim().toLowerCase(), memberId);
-		if (!result.success) {
-			return { error: 'Failed to send login email. Please try again later.' };
+		const member = await db.query.members.findFirst({
+			where: (m, { eq, isNull, and }) => and(
+				eq(m.id, memberId),
+				isNull(m.deletedAt)
+			)
+		});
+
+		if (!member) {
+			return { error: 'This account is no longer active.' };
 		}
-		return { success: true, message: 'Check your email for the login link.' };
+
+		await sendMagicLink(member.email, member.id);
+		return { sent: true };
 	}
 };
