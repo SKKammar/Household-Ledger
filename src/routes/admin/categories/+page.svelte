@@ -56,7 +56,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 10px 0;
-		border-bottom: 1px solid var(--rule, #c8b99a);
+		border-bottom: 1px solid var(--rule);
 	}
 	.rename-form {
 		display: flex;
@@ -69,12 +69,12 @@
 		font-size: 0.9em;
 	}
 	.delete-btn {
-		color: var(--stamp-red, #8b3a2a);
-		border-color: var(--stamp-red, #8b3a2a);
+		color: var(--stamp-red);
+		border-color: var(--stamp-red);
 		background: none;
 	}
 	.error-stamp {
-		color: var(--stamp-red, #8b3a2a);
+		color: var(--stamp-red);
 		margin-bottom: 20px;
 	}
 

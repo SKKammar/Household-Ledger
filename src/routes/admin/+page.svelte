@@ -121,7 +121,7 @@
 	.admin-section {
 		margin-bottom: 40px;
 		padding-bottom: 20px;
-		border-bottom: 1px solid var(--rule, #c8b99a);
+		border-bottom: 1px solid var(--rule);
 	}
 	.add-form {
 		display: flex;
@@ -141,7 +141,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 15px 0;
-		border-bottom: 1px solid var(--paper-dark, #e4dccc);
+		border-bottom: 1px solid var(--paper-dark);
 	}
 	.member-row.deleted {
 		opacity: 0.6;
@@ -154,11 +154,11 @@
 		font-family: 'Special Elite', cursive;
 	}
 	.admin-badge {
-		background: var(--stamp-blue, #2a4a6b);
+		background: var(--stamp-blue);
 		color: white;
 	}
 	.deleted-badge {
-		background: var(--stamp-red, #8b3a2a);
+		background: var(--stamp-red);
 		color: white;
 	}
 	.member-actions {
@@ -171,8 +171,8 @@
 		text-decoration: none;
 	}
 	.edit-btn {
-		color: var(--stamp-blue, #2a4a6b);
-		border: 1px solid var(--stamp-blue, #2a4a6b);
+		color: var(--stamp-blue);
+		border: 1px solid var(--stamp-blue);
 		background: none;
 	}
 	.admin-controls {
@@ -181,12 +181,12 @@
 		align-items: center;
 	}
 	.delete-btn {
-		color: var(--stamp-red, #8b3a2a);
-		border-color: var(--stamp-red, #8b3a2a);
+		color: var(--stamp-red);
+		border-color: var(--stamp-red);
 		background: none;
 	}
 	.danger-zone {
-		border: 1px dashed var(--stamp-red, #8b3a2a);
+		border: 1px dashed var(--stamp-red);
 		padding: 20px;
 		background: rgba(139, 58, 42, 0.05);
 	}
@@ -196,7 +196,7 @@
 		margin-top: 15px;
 	}
 	.error-stamp {
-		color: var(--stamp-red, #8b3a2a);
+		color: var(--stamp-red);
 		margin-bottom: 20px;
 	}
 
