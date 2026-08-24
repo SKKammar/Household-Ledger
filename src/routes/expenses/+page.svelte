@@ -7,7 +7,7 @@
 </script>
 
 <div class="expense-form-container">
-	<h1>Record Expense</h1>
+	<h1 class="page-title">Record Expense</h1>
 
 	{#if form?.error}
 		<div class="error-stamp">{form.error}</div>
@@ -15,13 +15,13 @@
 
 	<form method="POST" use:enhance>
 		<div class="form-group">
-			<label for="amount">Amount (₹)</label>
-			<input type="number" id="amount" name="amount" step="0.01" required min="0.01" />
+			<label class="field-label" for="amount">Amount (₹)</label>
+			<input class="field-input" type="number" id="amount" name="amount" step="0.01" required min="0.01" />
 		</div>
 
 		<div class="form-group">
-			<label for="categoryId">Category</label>
-			<select id="categoryId" name="categoryId" required>
+			<label class="field-label" for="categoryId">Category</label>
+			<select class="field-input" id="categoryId" name="categoryId" required>
 				<option value="" disabled selected>Select category...</option>
 				{#each data.categories as category}
 					<option value={category.id}>{category.name}</option>
@@ -30,35 +30,35 @@
 		</div>
 
 		<div class="form-group">
-			<label for="date">Date</label>
-			<input type="date" id="date" name="date" value={data.today} required />
+			<label class="field-label" for="date">Date</label>
+			<input class="field-input" type="date" id="date" name="date" value={data.today} required />
 		</div>
 
 		<div class="form-group">
-			<label for="note">Note (optional)</label>
-			<input type="text" id="note" name="note" placeholder="e.g. tomato, onion" />
+			<label class="field-label" for="note">Note (optional)</label>
+			<input class="field-input" type="text" id="note" name="note" placeholder="e.g. tomato, onion" />
 		</div>
 
 		<div class="form-group split-group">
-			<label>
-				<input type="checkbox" name="isSplit" value="true" bind:checked={isSplit} />
+			<label class="field-label" style="display: flex; align-items: center; gap: 10px;">
+				<input type="checkbox" name="isSplit" value="true" bind:checked={isSplit} style="width: auto;" />
 				Split this expense
 			</label>
 		</div>
 
 		{#if isSplit}
 			<div class="form-group members-list">
-				<p class="ink-muted">Select members to split with:</p>
+				<p class="ink-muted" style="font-family: 'Special Elite', cursive; font-size: 12px; margin-bottom: 8px;">Select members to split with:</p>
 				{#each data.members as member}
-					<label class="member-checkbox">
-						<input type="checkbox" name="splitMembers" value={member.id} />
+					<label class="member-checkbox field-label" style="font-weight: normal; margin-bottom: 8px;">
+						<input type="checkbox" name="splitMembers" value={member.id} style="width: auto;" />
 						{member.name}
 					</label>
 				{/each}
 			</div>
 		{/if}
 
-		<button type="submit">Record Expense</button>
+		<button class="stamp-button" type="submit">Record Expense</button>
 	</form>
 </div>
 
@@ -68,24 +68,39 @@
 		margin: 40px auto;
 		padding: 20px;
 	}
+	.page-title {
+		margin-bottom: 24px;
+		font-size: 28px;
+	}
 	.form-group {
 		margin-bottom: 20px;
 	}
-	label {
+	.field-label {
 		display: block;
 		margin-bottom: 5px;
+		font-family: 'Special Elite', cursive;
+		font-size: 12px;
 	}
-	input, select {
+	.field-input {
 		width: 100%;
 		padding: 8px;
+		font-family: 'Special Elite', cursive;
 	}
-	.split-group label {
-		display: flex;
-		align-items: center;
-		gap: 10px;
+	.stamp-button {
+		width: 100%;
+		padding: 10px;
+		background-color: var(--ink, #1a1a1a);
+		color: var(--paper, #f0ebe0);
+		border: none;
+		cursor: pointer;
+		font-family: 'Special Elite', cursive;
+		transition: background-color 0.2s;
 	}
-	.split-group input {
-		width: auto;
+	.stamp-button:hover {
+		background-color: #333;
+	}
+	.split-group {
+		margin-top: 30px;
 	}
 	.members-list {
 		margin-left: 20px;
@@ -96,15 +111,11 @@
 		display: flex;
 		align-items: center;
 		gap: 10px;
-		margin-bottom: 8px;
-		font-weight: normal;
-	}
-	.member-checkbox input {
-		width: auto;
 	}
 	.error-stamp {
 		color: var(--stamp-red, #8b3a2a);
 		margin-bottom: 20px;
+		font-family: 'Special Elite', cursive;
 	}
 
 	@media (max-width: 600px) {

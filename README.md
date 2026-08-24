@@ -22,6 +22,7 @@ No passwords, no complex accounting software—just magic links and clear monthl
 ## ✨ Features
 
 - 🔐 **Passwordless Magic Links**: Secure, instant login via email using Brevo. No passwords to forget.
+- 🏠 **Multi-Household Support**: Use the same email address across multiple households with a seamless context-switching login flow.
 - 💸 **Expense Splitting**: Log an expense and instantly split it equally among selected housemates.
 - 📊 **Monthly Statements**: View your "Net Share" vs "Total Paid" at a glance.
 - 🔒 **Tamper-Proof Records**: Expenses from past months are permanently locked and cannot be edited.

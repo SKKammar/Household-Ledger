@@ -29,6 +29,6 @@
 	}
 	.delete-btn:hover {
 		background: var(--stamp-red, #8b3a2a);
-		color: #fff;
+		color: var(--paper);
 	}
 </style>

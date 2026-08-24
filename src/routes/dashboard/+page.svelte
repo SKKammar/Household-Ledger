@@ -79,7 +79,7 @@
 	.header {
 		margin-bottom: 30px;
 		padding-bottom: 20px;
-		border-bottom: 2px solid var(--rule, #c8b99a);
+		border-bottom: 2px solid var(--rule);
 		display: flex;
 		justify-content: center;
 	}
@@ -92,18 +92,18 @@
 		font-family: 'Special Elite', cursive;
 		font-size: 10px;
 		letter-spacing: 0.1em;
-		color: #9c8f78;
+		color: var(--ink-muted);
 		background: none;
 		border: none;
 		cursor: pointer;
 		transition: color 0.15s;
 	}
-	.month-nav:hover { color: #2c2518; }
+	.month-nav:hover { color: var(--ink); }
 	.month-current {
 		font-family: 'Playfair Display', serif;
 		font-size: 24px; /* Increased size to match h1-ish feel */
 		font-weight: bold;
-		color: #2c2518;
+		color: var(--ink);
 		min-width: 220px;
 		text-align: center;
 	}
@@ -117,7 +117,7 @@
 		gap: 20px;
 	}
 	.member-card {
-		border: 1px solid #c8b99a;
+		border: 1px solid var(--rule);
 		border-radius: 0;
 		padding: 14px 16px;
 		position: relative;
